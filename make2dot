@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+# set -x
+export PS4='+ [${FUNCNAME[0]:+${FUNCNAME[0]}:}${LINENO}] '
+
+###
+### Usage: [DEBUG=1] make2dot [-f makefile.mk] [target]
+###
+
+make -Bnd "$@" |
+    sed -n 's/Considering target file `//p' |
+    tail -n+2 |
+    sed "s/'\.$//" |
+    awk -v debug_p=${DEBUG:-0} '
+BEGIN {
+    depth = stack_size = 0;
+    indent = "    ";
+    if (!debug_p)
+        print "digraph make2dot {";
+}
+
+function put_at(i, val) {
+    stack_size = i+1;
+    if (i > 0)
+        printf("%s\"%s\" -> \"%s\";\n", indent, stack[i-1], val);
+    stack[i] = val;
+}
+
+{
+    if (match($0, /^ +/))
+        depth = RLENGTH/2;
+
+    name = substr($0, 1 + depth*2);
+
+    if (debug_p)
+        printf("%s  # %u \"%s\"\n", $0, depth, name);
+    else
+        put_at(depth, name);
+}
+
+END {
+    if (!debug_p)
+        print "}";
+}
+'
