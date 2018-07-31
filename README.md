@@ -28,6 +28,8 @@ digraph make2dot {
 }
 ```
 
+![test.png](https://g.gravizo.com/g?digraph%20make2dot%20%7B%0A%20%20%20%20a%20-%3E%20b%3B%0A%20%20%20%20b%20-%3E%20c%3B%0A%20%20%20%20c%20-%3E%20e%3B%0A%20%20%20%20e%20-%3E%20d%3B%0A%20%20%20%20e%20-%3E%20f%3B%0A%20%20%20%20a%20-%3E%20g%3B%0A%20%20%20%20g%20-%3E%20h%3B%0A%20%20%20%20a%20-%3E%20i%3B%0A%7D%0A)
+
 "Debug mode" is activated by setting `DEBUG` environment variable:
 
 ```bash
